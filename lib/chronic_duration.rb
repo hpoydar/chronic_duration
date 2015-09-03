@@ -130,7 +130,9 @@ module ChronicDuration
         str.split(divider).map { |n|
           # add zeros only if n is an integer
           n.include?('.') ? ("%04.#{decimal_places}f" % n) : ("%02d" % n)
-        }.join(divider).gsub(/^(00:)+/, '').gsub(/^0/, '').gsub(/:$/, '')
+        }.join(divider).gsub(/^(00:)+/, '').gsub(/^0/, '').gsub(/:$/, '').gsub(/^[0-9]{0,2}$/) do |i|
+          "00:%02d" % i.to_i
+        end
       end
       joiner = ''
     end
