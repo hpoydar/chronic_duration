@@ -28,6 +28,8 @@ The reverse can also be accomplished with the output method. So pass in seconds 
     => 4 minutes 30 seconds
     >> ChronicDuration.output(270, :format => :chrono)
     => 4:30
+    >> ChronicDuration.output(270, :format => :chrono, :pad_to => :hours)
+    => 0:04:30
     >> ChronicDuration.output(1299600, :weeks => true)
     => 2 wks 1 day 1 hr
     >> ChronicDuration.output(1299600, :weeks => true, :units => 2)

@@ -197,6 +197,45 @@ describe ChronicDuration do
       end
     end
 
+    @pad_to_exemplars = {
+      (:years) =>
+        {
+          :chrono => '0:00:00:00:00:00'
+        },
+      (:months) =>
+        {
+          :chrono => '0:00:00:00:00'
+        },
+      (:days) =>
+        {
+          :chrono => '0:00:00:00'
+        },
+      (:hours) =>
+        {
+          :chrono => '0:00:00'
+        },
+      (:minutes) =>
+        {
+          :chrono => '0:00'
+        },
+      (:seconds) =>
+        {
+          :chrono => '0'
+        },
+      (nil) =>
+        {
+          :chrono => '0'
+        }
+    }
+
+    @pad_to_exemplars.each do |k, v|
+      v.each do |key, val|
+        it "should properly pad durations with a #{k.nil? ? "nil" : k}-level pad_to value using the #{key.to_s} format" do
+          ChronicDuration.output(0, :format => key, :pad_to => k).should == val
+        end
+      end
+    end
+
     it "returns weeks when needed" do
       ChronicDuration.output(45*24*60*60, :weeks => true).should =~ /.*wk.*/
     end

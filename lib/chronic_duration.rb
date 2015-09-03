@@ -51,6 +51,7 @@ module ChronicDuration
 
     opts[:format] ||= :default
     opts[:keep_zero] ||= false
+    opts[:pad_to] ||= :seconds
 
     years = months = weeks = days = hours = minutes = 0
 
@@ -130,7 +131,11 @@ module ChronicDuration
         str.split(divider).map { |n|
           # add zeros only if n is an integer
           n.include?('.') ? ("%04.#{decimal_places}f" % n) : ("%02d" % n)
-        }.join(divider).gsub(/^(00:)+/, '').gsub(/^0/, '').gsub(/:$/, '')
+        }.join(divider).tap do |time|
+          [:years, :months, :days, :hours, :minutes, :seconds].index(opts[:pad_to]).times do
+            time.sub!(/^0+:/, '')
+          end
+        end.gsub(/^0/, '').gsub(/:$/, '')
       end
       joiner = ''
     end
