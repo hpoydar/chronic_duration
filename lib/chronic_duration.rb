@@ -51,10 +51,12 @@ module ChronicDuration
 
     opts[:format] ||= :default
     opts[:keep_zero] ||= false
+    opts[:decimal_places] ||= seconds.to_s.split('.').last.length if seconds.is_a?(Float)
 
     years = months = weeks = days = hours = minutes = 0
 
-    decimal_places = seconds.to_s.split('.').last.length if seconds.is_a?(Float)
+    #decimal_places = seconds.to_s.split('.').last.length if seconds.is_a?(Float)
+    decimal_places = opts[:decimal_places]
 
     minute = 60
     hour = 60 * minute
@@ -129,7 +131,7 @@ module ChronicDuration
         divider = ':'
         str.split(divider).map { |n|
           # add zeros only if n is an integer
-          n.include?('.') ? ("%04.#{decimal_places}f" % n) : ("%02d" % n)
+          n.include?('.') ? ("%0#{decimal_places+3}.#{decimal_places}f" % n) : ("%02d" % n)
         }.join(divider).gsub(/^(00:)+/, '').gsub(/^0/, '').gsub(/:$/, '')
       end
       joiner = ''
