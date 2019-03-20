@@ -5,6 +5,9 @@ describe ChronicDuration do
   describe ".parse" do
 
     @exemplars = {
+      "Let it sit for 60 minutes depending on your preference and time restrictions" => 60 * 60,
+      "Let it sit for 20-60 minutes depending on your preference and time restrictions" => 60 * 60,
+      '5 min.'       => (60 * 5).to_i,
       '1:20'                  => 60 + 20,
       '1:20.51'               => 60 + 20.51,
       '4:01:01'               => 4 * 3600 + 60 + 1,
@@ -28,7 +31,8 @@ describe ChronicDuration do
       '18 months'             => 3600 * 24 * 30 * 18,
       '1 year 6 months'       => (3600 * 24 * (365.25 + 6 * 30)).to_i,
       'day'                   => 3600 * 24,
-      'minute 30s'            => 90
+      'minute 30s'            => 90,
+      'add 3 cups water'            => nil
     }
 
     context "when string can't be parsed" do

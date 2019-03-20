@@ -228,16 +228,17 @@ private
   # words to defined time units
   def filter_through_white_list(string)
     res = []
-    string.split(' ').each do |word|
+    string.split(/ |-/).each do |word|
       if word =~ float_matcher
         res << word.strip
         next
       end
-      stripped_word = word.strip.gsub(/^,/, '').gsub(/,$/, '')
+      stripped_word = word.strip.gsub(/^,|,$|\.$/, '')
       if mappings.has_key?(stripped_word)
         res << mappings[stripped_word]
-      elsif !join_words.include?(stripped_word) and ChronicDuration.raise_exceptions
-        raise DurationParseError, "An invalid word #{word.inspect} was used in the string to be parsed."
+      elsif !join_words.include?(stripped_word)
+        raise DurationParseError, "An invalid word #{word.inspect} was used in the string to be parsed." if ChronicDuration.raise_exceptions
+        res = [] if res.size == 1 # reset the number matcher if we don't have a valid duration.
       end
     end
     # add '1' at front if string starts with something recognizable but not with a number, like 'day' or 'minute 30sec'
